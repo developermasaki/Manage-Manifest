@@ -29,12 +29,19 @@
 
 ### node marker
 &nbsp;&nbsp;&nbsp; 特定の要素内の属性、および全ての子タグに、マージルールを適用する。以下は、その一覧である。具体的なマージのされ方は[このリンク](https://developer.android.com/build/manage-manifests#node_markers)で確認する。
-- `tools:node=merge` ... 競合が発生しない場合は、全ての属性とネストされた全ての要素（子タグ）をマージする。
+- `tools:node="merge"` ... 競合が発生しない場合は、全ての属性とネストされた全ての要素（子タグ）をマージする。
 - `tools:node="mergeOnlyAttributes"` ... 特定の要素内の属性のみをマージする。
 - `tools:node="remove"` ... マージされたマニフェストファイルから、特定の要素を削除する。
 - `tools:node="removeAll"` ... マージされたマニフェストファイルから、特定の要素タイプに一致する全ての要素を削除する。
 - `tools:node="replace"` ... 優先度の低いマニフェストに、一致する要素がある場合は、それを無視して、優先度の高いマニフェストの特定の要素をそのまま使用する。
 - `tools:node="strict"` ... 優先度の低いマニフェストの要素と、優先度の高いマニフェストの要素が完全に一致しない場合、ビルドエラーを生成する。ただし、マージルールマーカーを追加することで、解決できる。
+
+```
+<activity android:name="com.example.Activity"
+    android:screenOrientation="portrait"
+    tools:node="merge">
+</activity>
+```
 
 ### attribute marker
 &nbsp;&nbsp;&nbsp; 要素内の特定の属性にのみマージルールを適用するには、以下の属性を使用する。各属性は、`tools:replace="android:theme,android:exported"`のように、カンマで区切って複数の属性を指定できる。
@@ -55,7 +62,7 @@
 &nbsp;&nbsp;&nbsp; メインのマニフェストより、`minSdk`の値が高いライブラリをインポートしようとすると、エラーが発生する。そこで、メインのマニフェストの`<uses-sdk>`タグの`overrideLibrary`属性に、該当のライブラリのパッケージ名を指定することで、メインのマニフェストの`minSdk`を適用できる。
  
 ### Implicit system permissions
-&nbsp;&nbsp;&nbsp; 優先度の低いマニフェストの`targetSdkVersion`が低く、`targetSdkVersion`の値がシステム権限の制限が追加されたバージョン以上の場合、マージされたマニフェストファイルには、明示的に権限が追加される。
+&nbsp;&nbsp;&nbsp; 優先度の低いマニフェストの`targetSdkVersion`が低く、優先度の高いマニフェストの`targetSdkVersion`の値がシステム権限の制限が追加されたバージョン以上の場合（つまり、明示的に権限を追加しないといけない場合）、マージされたマニフェストファイルには、明示的に権限が追加される。
 
 ### How to find conflicts?
 &nbsp;&nbsp;&nbsp; 以下は、マージされたマニフェストファイルのプレピューを確認する方法である。<br>
